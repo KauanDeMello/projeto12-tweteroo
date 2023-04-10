@@ -46,16 +46,18 @@ app.post("/tweets", (req, res) => {
 
 
 
-app.get("/tweets", (req, res) => {
-    const tweets = [
-        {
-            username: "bobesponja",
-            avatar: "https://cdn.shopify.com/s/files/1/0150/0643/3380/files/Screen_Shot_2019-07-01_at_11.35.42_AM_370x230@2x.png",
-            tweet: "Eu amo hambúrguer de siri!"
-        }
-    ]
-    res.send(tweets)
-})
+  app.get("/tweets", (req, res) => {
+    const lastTenTweets = tweets.slice(-10).reverse();
+    const tweetsWithAvatar = lastTenTweets.map((tweet) => {
+      const userWithAvatar = user.find((u) => u.username === tweet.username);
+      return {
+        username: tweet.username,
+        avatar: userWithAvatar?.avatar || "",
+        tweet: tweet.tweet,
+      };
+    });
+    res.send(tweetsWithAvatar);
+  });
 
 
 const PORT = 5000
