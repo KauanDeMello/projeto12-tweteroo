@@ -6,7 +6,7 @@ app.use(cors())
 app.use(express.json())
 
 
-const users = []
+const user = []
 
 const tweets = []
 
@@ -23,10 +23,27 @@ app.post("/sign-up", (req, res) =>{
         avatar: avatar
       }
     
-      users.push(newUser)
+      user.push(newUser)
     
       res.status(201).send("Ok!")
 } )
+
+
+app.post("/tweets", (req, res) => {
+    const { username, tweet } = req.body;
+  
+    
+    const userExists = user.find((u) => u.username === username);
+    if (!userExists) {
+      return res.status(401).send("UNAUTHORIZED");
+    }
+  
+
+    tweets.push({ username, tweet });
+  
+    res.status(201).send("OK");
+  });
+
 
 
 app.get("/tweets", (req, res) => {
